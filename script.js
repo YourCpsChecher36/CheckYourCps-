@@ -10,31 +10,35 @@ const bestEl = document.getElementById("best");
 
 loadBest();
 
-function setTime(time){
+function setTime(time) {
     selectedTime = time;
 }
 
 clickArea.addEventListener("click", () => {
 
-    if(!started){
+    if (!started) {
         startTest();
     }
 
-    if(started){
+    if (started) {
         clicks++;
         clicksEl.textContent = clicks;
     }
 
 });
 
-function startTest(){
+function startTest() {
 
     started = true;
     clicks = 0;
-    clicksEl.textContent = 0;
-    cpsEl.textContent = 0;
 
-    clickArea.innerHTML = selectedTime + "s Running...";
+    clicksEl.textContent = "0";
+    cpsEl.textContent = "0.00";
+
+    clickArea.innerHTML = `
+        <div style="font-size:40px;">0</div>
+        <div>${selectedTime}s Running...</div>
+    `;
 
     timer = setTimeout(() => {
 
@@ -44,60 +48,60 @@ function startTest(){
 
         cpsEl.textContent = cps;
 
-        clickArea.innerHTML = "CLICK TO START";
+        clickArea.innerHTML = `
+            <div style="font-size:32px;color:#00ffff;">
+                CPS: ${cps}
+            </div>
+            <div style="font-size:20px;margin-top:10px;">
+                Clicks: ${clicks}
+            </div>
+            <div style="margin-top:15px;">
+                CLICK TO START
+            </div>
+        `;
 
         updateBest(cps);
 
-        alert(
-            "Test Finished!\n\n" +
-            "Clicks: " + clicks +
-            "\nCPS: " + cps
-        );
-
     }, selectedTime * 1000);
-
 }
 
-function loadBest(){
+function loadBest() {
 
     const best = localStorage.getItem("bestCPS");
 
-    if(best){
+    if (best) {
         bestEl.textContent = best;
+    } else {
+        bestEl.textContent = "0.00";
     }
-
 }
 
-function updateBest(cps){
+function updateBest(cps) {
 
     let best = localStorage.getItem("bestCPS");
 
-    if(!best || parseFloat(cps) > parseFloat(best)){
+    if (!best || parseFloat(cps) > parseFloat(best)) {
 
         localStorage.setItem("bestCPS", cps);
 
         bestEl.textContent = cps;
     }
-
 }
 
-function submitScore(){
+function submitScore() {
 
     const username =
         document.getElementById("username").value.trim();
 
-    if(username === ""){
-        alert("Enter Username First");
+    if (username === "") {
         return;
     }
 
     const cps =
         document.getElementById("cps").textContent;
 
-    alert(
-        "Leaderboard integration will be added later.\n\n" +
+    console.log(
         "Username: " + username +
-        "\nCPS: " + cps
+        " | CPS: " + cps
     );
-
-                                       }
+}
